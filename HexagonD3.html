@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+       <title>Page Title</title>
+
+    </head>
+<body>
+   <h1>Page Title</h1>
+        <p>This is a really interesting paragraph!</p>
+<svg width="24cm" height="10cm" viewBox="0 0 1200 800"
+     xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <g>
+        
+    </g>
+    
+</svg>  
+<style type="text/css">
+    polygon:hover {stroke:black;}
+</style>
+
+
+
+    
+    
+<script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+<script src="https://d3js.org/d3-polygon.v1.min.js"></script>
+<script >
+   /*global d3*/
+   
+   var HexPoints = [[134,75],[242,137.5],[242,262.5],[134,325],[26,262.6],[26,137.5]];
+   //var HexPoints = {x1:134,y1:75,x2:242,y2:137.5,x3:242,y3:262.5,x4:134,y4:325,x5:26,y5:262.6,x6:26,y6:137.5};
+   //var hull = d3.polygonHull(HexPoints);
+   
+   var D3svg = d3.select("svg");
+   
+   
+       
+   var D3poly=D3svg.selectAll("polygon")
+      .data([0,1,2,3,4,5,6,7,8,9,10])
+      .enter()
+      .append("polygon")
+      .attr("points",HexPoints.join(" "))
+      .attr("fill","gold")
+      //.attr("fill",function() {return "hsl(" + Math.random() * 360 + ",100%,50%)";})
+      .attr("stroke-width", "5px")
+      .attr("stroke","blue")
+      .attr("transform",  function(d,i){return "translate("+BuildHoneyComb(i)+")";});
+      
+    function BuildHoneyComb(MyIndex)
+    {
+        if(MyIndex>4)
+        {
+            return 216*(MyIndex-5)+108 + ",187.5";     
+        }
+        else 
+        {
+            return 216*MyIndex + ",0";
+        }
+    }
+   
+</script>
+
+</body>
+</html>
