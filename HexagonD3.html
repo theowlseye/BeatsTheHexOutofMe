@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-       <title>Page Title</title>
+       <title>Hexagons</title>
 
     </head>
 <body>
-   <h1>Page Title</h1>
-        <p>This is a really interesting paragraph!</p>
-<svg width="24cm" height="10cm" viewBox="0 0 1200 800"
+   <h1>Hexagons</h1>
+        <p>Welcome to the hive</p>
+<svg width="24cm" height="10cm" viewBox="0 0 2400 1600"
      xmlns="http://www.w3.org/2000/svg" version="1.1">
     <g>
         
@@ -15,7 +15,7 @@
     
 </svg>  
 <style type="text/css">
-    polygon:hover {stroke:black;}
+    polygon:hover {stroke:black;fill:white;}
 </style>
 
 
@@ -36,25 +36,34 @@
    
        
    var D3poly=D3svg.selectAll("polygon")
-      .data([0,1,2,3,4,5,6,7,8,9,10])
+      .data([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17])
       .enter()
       .append("polygon")
       .attr("points",HexPoints.join(" "))
       .attr("fill","gold")
       //.attr("fill",function() {return "hsl(" + Math.random() * 360 + ",100%,50%)";})
-      .attr("stroke-width", "5px")
+      .attr("stroke-width", "8px")
       .attr("stroke","blue")
+      .transition()
+      .duration(function(d,i){return 400;})
+      .delay(function(d,i) {  return 100*i;})
       .attr("transform",  function(d,i){return "translate("+BuildHoneyComb(i)+")";});
       
+    
+    
     function BuildHoneyComb(MyIndex)
     {
-        if(MyIndex>4)
-        {
-            return 216*(MyIndex-5)+108 + ",187.5";     
-        }
-        else 
+        if(MyIndex<=4)
         {
             return 216*MyIndex + ",0";
+        }
+        else if(MyIndex>4&&MyIndex<=10)
+        {
+            return 216*(MyIndex-5)-108 + ",187.5";
+        }
+        else if(MyIndex>11)
+        {
+            return 216*(MyIndex-12) + ",375";
         }
     }
    
