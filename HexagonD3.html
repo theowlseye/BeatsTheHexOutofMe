@@ -9,13 +9,13 @@
         <p>Welcome to the hive</p>
 <svg width="26cm" height="15cm" viewBox="0 0 2400 1600"
      xmlns="http://www.w3.org/2000/svg" version="1.1">
-    <g>
+    <g id"AllHexagons" onclick="Hex_Click(evt)">
         
     </g>
     
 </svg>  
 <style type="text/css">
-    polygon:hover {stroke:black;fill:white;}
+    polygon:hover {stroke:black;opacity: .4;}
 </style>
 
 
@@ -36,9 +36,10 @@
    
    var D3svg = d3.select("svg");
    
+   var D3Nodes=D3svg.select("g");
   
        
-   var D3poly=D3svg.selectAll("polygon")
+   var D3poly=D3Nodes.selectAll("polygon")
       .data([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18])
       .enter()
       .append("polygon")
@@ -152,6 +153,11 @@
     return [[Pnt1.x,Pnt1.y],[Pnt2.x,Pnt2.y],[Pnt3.x,Pnt3.y],[Pnt4.x,Pnt4.y],[Pnt5.x,Pnt5.y],[Pnt6.x,Pnt6.y]];
    }
    
+   function Hex_Click(evt)
+   {
+     var Hex= evt.target;
+     Hex.style.setProperty("fill","blue", "");
+   }
 </script>
 
 </body>
