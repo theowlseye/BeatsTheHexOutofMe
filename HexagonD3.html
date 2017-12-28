@@ -42,6 +42,7 @@
       .append("polygon")
       .attr("points",HexPoints.join(" "))
       .attr("fill","orange")
+      .attr("id",function(d,i){return "poly" + i;})
       //.attr("fill",function() {return "hsl(" + Math.random() * 360 + ",100%,50%)";})
       .attr("stroke-width", "8px")
       .attr("stroke","blue")
@@ -50,6 +51,7 @@
       .delay(function(d,i) {  return 100*i;})
       .attr("transform",  function(d,i){return "translate("+BuildHoneyComb(i)+")";});
       
+    
     
     var D3text=D3Nodes.selectAll("text")
        .data([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18])
@@ -61,7 +63,15 @@
        .attr("font-size", "80px")
        .attr("text-anchor","middle")
        .attr("fill", "black")
+       .attr("visibility","hidden")
        .text(function(d,i){return i;});
+    
+    window.onload = function(){
+       setInterval(function(){ D3text.style("visibility","visible"); }, 2500);    
+    }
+        
+    
+       
       
    
     
@@ -164,7 +174,17 @@
    function Hex_Click(evt)
    {
      var Hex= evt.target;
+     
      Hex.style.setProperty("fill","blue", "");
+     if(Hex.nodeName=="text")
+     {
+       
+       D3Nodes.select("#poly" + Hex.textContent ).attr("fill","blue");
+     }
+     else
+     {
+         
+     }
    }
 </script>
 
