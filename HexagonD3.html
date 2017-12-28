@@ -41,7 +41,7 @@
       .enter()
       .append("polygon")
       .attr("points",HexPoints.join(" "))
-      .attr("fill","orange")
+      .attr("fill",function(d,i){if(i<=6){return "orange";}else{return "black";}})
       .attr("id",function(d,i){return "poly" + i;})
       //.attr("fill",function() {return "hsl(" + Math.random() * 360 + ",100%,50%)";})
       .attr("stroke-width", "8px")
@@ -57,6 +57,7 @@
        .data([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18])
        .enter()
        .append("text")
+       .attr("id",function(d,i){return "text" + i;})
        .attr("x",function(d,i){ return 1200+Math.round(BuildHoneyComb(i).split(",")[0]);})
        .attr("y",function(d,i){return 800+Math.round(BuildHoneyComb(i).split(",")[1]);})
        .attr("font-family", "sans-serif")
@@ -67,7 +68,7 @@
        .text(function(d,i){return i;});
     
     window.onload = function(){
-       setInterval(function(){ D3text.style("visibility","visible"); }, 2500);    
+       var TurnOnNumbers=setTimeout(function(){ D3text.style("visibility","visible"); }, 2500);    
     }
         
     
@@ -183,7 +184,7 @@
      }
      else
      {
-         
+         D3Nodes.select("#text" + Hex.id.slice(4)).attr("fill","blue");
      }
    }
 </script>
