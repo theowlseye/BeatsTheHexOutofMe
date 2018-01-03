@@ -24,8 +24,11 @@
     
 <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
 <script src="https://d3js.org/d3-polygon.v1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js"></script>
 <script >
    /*global d3*/
+   /*global TweenLite*/
+    /*global TweenMax*/
    var HexRadius = 180;
    var Yalign = Math.sin(Math.PI/180*30);
    var Xalign =Math.cos(Math.PI/180*30) 
@@ -66,6 +69,11 @@
        .attr("fill", "black")
        .attr("visibility","hidden")
        .text(function(d,i){return i;});
+    
+   
+  
+   
+  
     
     window.onload = function(){
        var TurnOnNumbers=setTimeout(function(){ D3text.style("visibility","visible"); }, 2500);    
@@ -176,17 +184,15 @@
    {
      var Hex= evt.target;
      
-     Hex.style.setProperty("fill","blue", "");
-     if(Hex.nodeName=="text")
-     {
-       
-       D3Nodes.select("#poly" + Hex.textContent ).attr("fill","blue");
-     }
-     else
-     {
-         D3Nodes.select("#text" + Hex.id.slice(4)).attr("fill","blue");
-     }
+      var MyTween =TweenMax.to(document.getElementById("poly" + Hex.id.slice(4)),1,{rotation:360,transformOrigin:"50% 50%",onComplete:myFunction});
+   
+   function myFunction()
+   {
+       MyTween.reverse();
    }
+   }
+   
+   
 </script>
 
 </body>
