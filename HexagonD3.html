@@ -9,13 +9,13 @@
         <p>Welcome to the hive</p>
 <svg width="26cm" height="15cm" viewBox="0 0 2400 1600"
      xmlns="http://www.w3.org/2000/svg" version="1.1">
-    <g id"AllHexagons" onclick="Hex_Click(evt)">
+    <g id="AllHexagons" onclick="Hex_Click(evt)">
         
     </g>
     
 </svg>  
 <style type="text/css">
-    polygon:hover {stroke:black;opacity: .4;}
+    
 </style>
 
 
@@ -29,46 +29,63 @@
    /*global d3*/
    /*global TweenLite*/
     /*global TweenMax*/
+    var svgns = "http://www.w3.org/2000/svg";
    var HexRadius = 180;
    var Yalign = Math.sin(Math.PI/180*30);
-   var Xalign =Math.cos(Math.PI/180*30) 
-   var HexPoints = BuildStartHex();
+   var Xalign =Math.cos(Math.PI/180*30); 
+   var Hexagons=[];
+   var HexShapes=[];
    
-   var D3svg = d3.select("svg");
+  // Hexagons.push(BuildHex(1200,800));
+   var D3svgs = document.getElementsByTagName("svg");
    
-   var D3Nodes=D3svg.select("g");
+   var D3Nodes=document.getElementsByTagName("g");
+   var i;
+   for(i=0;i<19;i++)
+   {
+    HexShapes.push(document.createElementNS(svgns,"polygon"));
+   
+   Hexagons.push(BuildHex(1200+Math.round(BuildHoneyComb(i).split(",")[0]),800+Math.round(BuildHoneyComb(i).split(",")[1])));
+   HexShapes[i].setAttribute("points",Hexagons[i].join(" "));
+   HexShapes[i].setAttribute("fill","orange");    
+   HexShapes[i].setAttribute("id","poly" + i);
+   HexShapes[i].setAttribute("stroke-width","8px");
+   HexShapes[i].setAttribute("stroke","blue");
+   
+   D3Nodes[0].appendChild(HexShapes[i]);
+   }
+ //yuck ugly code
   
-       
-   var D3poly=D3Nodes.selectAll("polygon")
-      .data([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18])
-      .enter()
-      .append("polygon")
-      .attr("points",HexPoints.join(" "))
-      .attr("fill",function(d,i){if(i<=6){return "orange";}else{return "black";}})
-      .attr("id",function(d,i){return "poly" + i;})
-      //.attr("fill",function() {return "hsl(" + Math.random() * 360 + ",100%,50%)";})
-      .attr("stroke-width", "8px")
-      .attr("stroke","blue")
-      .transition()
-      .duration(function(d,i){return 800;})
-      .delay(function(d,i) {  return 100*i;})
-      .attr("transform",  function(d,i){return "translate("+BuildHoneyComb(i)+")";});
+  
+  
+   //HexShapes.push(document.createElementNS(svgns,"polygon"));
+   //HexShapes[1].setAttribute("points",Hexagons[1].join(" "));
+   //HexShapes[1].setAttribute("fill","orange");    
+   //HexShapes[1].setAttribute("id","poly1");
+   //HexShapes[1].setAttribute("stroke-width","8px");
+   //HexShapes[1].setAttribute("stroke","blue");
+     
+    //D3Nodes[0].appendChild(HexShapes[1]);     
+  //      .transition()
+//      .duration(function(d,i){return 800;})
+//      .delay(function(d,i) {  return 100*i;})
+//      .attr("transform",  function(d,i){return "translate("+BuildHoneyComb(i)+")";});
       
+  
     
-    
-    var D3text=D3Nodes.selectAll("text")
-       .data([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18])
-       .enter()
-       .append("text")
-       .attr("id",function(d,i){return "text" + i;})
-       .attr("x",function(d,i){ return 1200+Math.round(BuildHoneyComb(i).split(",")[0]);})
-       .attr("y",function(d,i){return 800+Math.round(BuildHoneyComb(i).split(",")[1]);})
-       .attr("font-family", "sans-serif")
-       .attr("font-size", "80px")
-       .attr("text-anchor","middle")
-       .attr("fill", "black")
-       .attr("visibility","hidden")
-       .text(function(d,i){return i;});
+   // var D3text=D3Nodes.selectAll("text")
+//       .data([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18])
+//       .enter()
+//       .append("text")
+//       .attr("id",function(d,i){return "text" + i;})
+//       .attr("x",function(d,i){ return 1200+Math.round(BuildHoneyComb(i).split(",")[0]);})
+//       .attr("y",function(d,i){return 800+Math.round(BuildHoneyComb(i).split(",")[1]);})
+//       .attr("font-family", "sans-serif")
+//       .attr("font-size", "80px")
+//       .attr("text-anchor","middle")
+//       .attr("fill", "black")
+//       .attr("visibility","hidden")
+//       .text(function(d,i){return i;});
     
    
   
@@ -76,7 +93,7 @@
   
     
     window.onload = function(){
-       var TurnOnNumbers=setTimeout(function(){ D3text.style("visibility","visible"); }, 2500);    
+//       var TurnOnNumbers=setTimeout(function(){ D3text.style("visibility","visible"); }, 2500);    
     }
         
     
@@ -145,9 +162,9 @@
         }
     }
    
-   function BuildStartHex()
+   function BuildHex(MidX,MidY)
    {
-    var MidPoint ={"x":1200,"y":800};
+    var MidPoint ={"x":MidX,"y":MidY};
     var Pnt1 = {"x":0,"y":0};
     var Pnt2 = {"x":0,"y":0};
     var Pnt3={"x":0,"y":0};
@@ -184,7 +201,7 @@
    {
      var Hex= evt.target;
      
-      var MyTween =TweenMax.to(document.getElementById("poly" + Hex.id.slice(4)),1,{rotation:360,transformOrigin:"50% 50%",onComplete:myFunction});
+      var MyTween =TweenMax.to(HexShapes[Hex.id.slice(4)],1.5,{rotation:360,transformOrigin:"50% 50%",onComplete:myFunction});
    
    function myFunction()
    {
