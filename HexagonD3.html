@@ -35,17 +35,24 @@
    var Xalign =Math.cos(Math.PI/180*30); 
    var Hexagons=[];
    var HexShapes=[];
-   
+   var MiddlePoint ={"x":1200,"y":800};
   // Hexagons.push(BuildHex(1200,800));
-   var D3svgs = document.getElementsByTagName("svg");
+   //var D3svgs = document.getElementsByTagName("svg");
    
    var D3Nodes=document.getElementsByTagName("g");
    var i;
+   
    for(i=0;i<19;i++)
    {
     HexShapes.push(document.createElementNS(svgns,"polygon"));
    
-   Hexagons.push(BuildHex(1200+Math.round(BuildHoneyComb(i).split(",")[0]),800+Math.round(BuildHoneyComb(i).split(",")[1])));
+   //ugly code
+   //find the middle point for the next Hexagon
+   MiddlePoint.x=1200+Math.round(BuildHoneyComb(i).split(",")[0]);
+   MiddlePoint.y=800+Math.round(BuildHoneyComb(i).split(",")[1]);
+   //use the middle point to create the next hexagon
+   Hexagons.push(BuildHex(MiddlePoint.x,MiddlePoint.y));
+   
    HexShapes[i].setAttribute("points",Hexagons[i].join(" "));
    HexShapes[i].setAttribute("fill","orange");    
    HexShapes[i].setAttribute("id","poly" + i);
@@ -100,7 +107,8 @@
        
       
    
-    
+    //this finds the middle point 
+    //I want this code to look more like the buildhex
     function BuildHoneyComb(MyIndex)
     {
         //find middle
@@ -162,6 +170,11 @@
         }
     }
    
+   //the middle points of the next tier form a hexagon rotated 90
+   function BuildMiddlePntsTier1()
+   {
+   }
+   
    function BuildHex(MidX,MidY)
    {
     var MidPoint ={"x":MidX,"y":MidY};
@@ -201,12 +214,12 @@
    {
      var Hex= evt.target;
      
-      var MyTween =TweenMax.to(HexShapes[Hex.id.slice(4)],1.5,{rotation:360,transformOrigin:"50% 50%",onComplete:myFunction});
-   
-   function myFunction()
-   {
-       MyTween.reverse();
-   }
+      
+      var MyTween =TweenMax.to(Hex,1.5,{rotation:90,transformOrigin:"50% 50%",onComplete:myFunction});
+     function myFunction()
+     {
+       //MyTween.reverse();
+     }
    }
    
    
