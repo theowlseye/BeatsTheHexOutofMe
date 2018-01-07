@@ -33,26 +33,46 @@
    var HexRadius = 180;
    var Yalign = Math.sin(Math.PI/180*30);
    var Xalign =Math.cos(Math.PI/180*30); 
+   var Yalign90 = Math.sin(Math.PI/180*60);
+   var Xalign90 = Math.cos(Math.PI/180*60);
    var Hexagons=[];
    var HexShapes=[];
    var MiddlePoint ={"x":1200,"y":800};
-  // Hexagons.push(BuildHex(1200,800));
+   var Tier1MidPoints=BuildMiddlePntsTier1(1200,800,HexRadius*Xalign*2);
+   var Tier2MidPoints=BuildMiddlePntsTier2(1200,800,HexRadius*Xalign*4);
+   // Hexagons.push(BuildHex(1200,800));
    //var D3svgs = document.getElementsByTagName("svg");
    
    var D3Nodes=document.getElementsByTagName("g");
    var i;
    
-   for(i=0;i<19;i++)
+   
+   
+   for(i=0;i<18;i++)
    {
     HexShapes.push(document.createElementNS(svgns,"polygon"));
    
-   //ugly code
+   //figure out which tier your on
+   if(i==0)
+   {
+     Hexagons.push(BuildHex(1200,800,HexRadius));    
+   }
+   else if(i>0&&i<7)
+   {
    //find the middle point for the next Hexagon
-   MiddlePoint.x=1200+Math.round(BuildHoneyComb(i).split(",")[0]);
-   MiddlePoint.y=800+Math.round(BuildHoneyComb(i).split(",")[1]);
-   //use the middle point to create the next hexagon
-   Hexagons.push(BuildHex(MiddlePoint.x,MiddlePoint.y));
    
+   MiddlePoint.x=Tier1MidPoints[i-1][0];
+   MiddlePoint.y=Tier1MidPoints[i-1][1];
+   //use the middle point to create the next hexagon
+   Hexagons.push(BuildHex(MiddlePoint.x,MiddlePoint.y,HexRadius));
+   }
+   else if(i>6&&i<18)
+   {
+     MiddlePoint.x=Tier2MidPoints[i-7][0];
+     MiddlePoint.y=Tier2MidPoints[i-7][1];
+     //use the middle point to create the next hexagon
+     Hexagons.push(BuildHex(MiddlePoint.x,MiddlePoint.y,HexRadius));
+   }
    HexShapes[i].setAttribute("points",Hexagons[i].join(" "));
    HexShapes[i].setAttribute("fill","orange");    
    HexShapes[i].setAttribute("id","poly" + i);
@@ -107,75 +127,104 @@
        
       
    
-    //this finds the middle point 
-    //I want this code to look more like the buildhex
-    function BuildHoneyComb(MyIndex)
-    {
-        //find middle
-        if(MyIndex==0)
-        {
-            return 0 +"," + 0;
-        }
-        else if(MyIndex==1||MyIndex==2)
-        {
-            return HexRadius*Xalign*(MyIndex-1)*2-HexRadius*Xalign + "," + -1*HexRadius*Yalign*3;
-        }
-        else if(MyIndex==3)
-        {
-            return HexRadius*Xalign*2*(MyIndex-2) + ",0";
-        }
-        else if(MyIndex==4||MyIndex==5)
-        {
-            return HexRadius*Xalign*2*(5-MyIndex)-HexRadius*Xalign + "," + HexRadius*Yalign*3;
-        }
-        else if(MyIndex==6)
-        {
-            return HexRadius*Xalign*2*-1 + ",0";
-        }
-        else if(MyIndex==7)
-        {
-            return HexRadius*Xalign*-1*3 + "," + -1*HexRadius*Yalign*3;
-        }
-        else if(MyIndex>7&&MyIndex<11)
-        {
-            return HexRadius*Xalign*(MyIndex-7)*2-HexRadius*Xalign*4 + "," + -1*HexRadius*Yalign*6;
-        }
-        else if(MyIndex==11)
-        {
-            return HexRadius*Xalign*(MyIndex-9)*2-HexRadius*Xalign + "," + -1*HexRadius*Yalign*3;
-        }
-         else if(MyIndex==12)
-        {
-            return HexRadius*Xalign*(MyIndex-10)*2 + ",0";
-        }
-          else if(MyIndex==13)
-        {
-           return HexRadius*Xalign*4-HexRadius*Xalign + "," + HexRadius*Yalign*3;
-        }
-         else if(MyIndex>13&&MyIndex<17)
-        {
-            return HexRadius*Xalign*2*(15-MyIndex) + "," + HexRadius*Yalign*6;
-        }
-         else if(MyIndex==17)
-        {
-           return HexRadius*Xalign*2*-1-HexRadius*Xalign + "," + HexRadius*Yalign*3;
-        }
-         else if(MyIndex==18)
-        {
-           return HexRadius*Xalign*2*-2+ ",0";
-        }
-        else
-        {
-            return HexRadius*Xalign*2*(MyIndex-17)-HexRadius*Xalign*2 + "," + HexRadius*Yalign*3*2*2;
-        }
-    }
+   
    
    //the middle points of the next tier form a hexagon rotated 90
-   function BuildMiddlePntsTier1()
+   function BuildMiddlePntsTier1(MidX,MidY,HexRadius)
    {
+     var MidPoint ={"x":MidX,"y":MidY};
+     var Pnt1 = {"x":0,"y":0};
+     var Pnt2 = {"x":0,"y":0};
+     var Pnt3={"x":0,"y":0};
+     var Pnt4={"x":0,"y":0};
+     var Pnt5={"x":0,"y":0};
+     var Pnt6={"x":0,"y":0};
+  
+     Pnt1.x=MidPoint.x+Xalign90*HexRadius;
+     Pnt1.y=MidPoint.y-Yalign90*HexRadius;
+     
+    
+     Pnt2.x=MidPoint.x+HexRadius;
+     Pnt2.y=MidPoint.y;
+    
+     Pnt3.x=MidPoint.x+Xalign90*HexRadius;
+     Pnt3.y=MidPoint.y+Yalign90*HexRadius;
+    
+     Pnt4.x=MidPoint.x-Xalign90*HexRadius;
+     Pnt4.y=MidPoint.y+Yalign90*HexRadius;
+    
+     Pnt5.x=MidPoint.x-HexRadius;
+     Pnt5.y=MidPoint.y;
+     
+     Pnt6.x=MidPoint.x-Xalign90*HexRadius;
+     Pnt6.y=MidPoint.y-Yalign90*HexRadius;
+    
+     
+   
+    return [[Pnt1.x,Pnt1.y],[Pnt2.x,Pnt2.y],[Pnt3.x,Pnt3.y],[Pnt4.x,Pnt4.y],[Pnt5.x,Pnt5.y],[Pnt6.x,Pnt6.y]];   
    }
    
-   function BuildHex(MidX,MidY)
+   //the middle points of the next tier form a hexagon rotated 90
+   function BuildMiddlePntsTier2(MidX,MidY,HexRadius)
+   {
+     var MidPoint ={"x":MidX,"y":MidY};
+     var Pnt1 = {"x":0,"y":0};
+     var Pnt2 = {"x":0,"y":0};
+     var Pnt3={"x":0,"y":0};
+     var Pnt4={"x":0,"y":0};
+     var Pnt5={"x":0,"y":0};
+     var Pnt6={"x":0,"y":0};
+     var Pnt7={"x":0,"y":0};
+     var Pnt8={"x":0,"y":0};
+     var Pnt9={"x":0,"y":0};
+     var Pnt10={"x":0,"y":0};
+     var Pnt11={"x":0,"y":0};
+     var Pnt12={"x":0,"y":0};
+     var AllPnts=[];
+     
+     Pnt1.x=MidPoint.x+Xalign90*HexRadius-HexRadius/2;
+     Pnt1.y=MidPoint.y-Yalign90*HexRadius;
+     
+     Pnt2.x=MidPoint.x+Xalign90*HexRadius;
+     Pnt2.y=MidPoint.y-Yalign90*HexRadius;
+     
+     Pnt3.x=MidPoint.x+Xalign90*HexRadius*1.5;
+     Pnt3.y=MidPoint.y-Yalign90*HexRadius/2;
+     
+     Pnt4.x=MidPoint.x+HexRadius;
+     Pnt4.y=MidPoint.y;
+     
+     Pnt5.x=MidPoint.x+Xalign90*HexRadius*1.5
+     Pnt5.y=MidPoint.y+Yalign90*HexRadius/2;
+     
+     Pnt6.x=MidPoint.x+Xalign90*HexRadius;
+     Pnt6.y=MidPoint.y+Yalign90*HexRadius;
+    
+     Pnt8.x=MidPoint.x-Xalign90*HexRadius;
+     Pnt8.y=MidPoint.y+Yalign90*HexRadius;
+    
+     Pnt10.x=MidPoint.x-HexRadius;
+     Pnt10.y=MidPoint.y;
+     
+     Pnt12.x=MidPoint.x-Xalign90*HexRadius;
+     Pnt12.y=MidPoint.y-Yalign90*HexRadius;
+    
+     AllPnts.push([Pnt1.x,Pnt1.y]);
+     AllPnts.push([Pnt2.x,Pnt2.y]);
+     AllPnts.push([Pnt3.x,Pnt3.y]);
+     AllPnts.push([Pnt4.x,Pnt4.y]);
+     AllPnts.push([Pnt5.x,Pnt5.y]);
+     AllPnts.push([Pnt6.x,Pnt6.y]);
+     AllPnts.push([Pnt8.x,Pnt8.y]);
+     AllPnts.push([Pnt10.x,Pnt10.y]);
+     AllPnts.push([Pnt12.x,Pnt12.y]);
+     
+     
+    return AllPnts;
+    
+   }
+   
+   function BuildHex(MidX,MidY,HexRadius)
    {
     var MidPoint ={"x":MidX,"y":MidY};
     var Pnt1 = {"x":0,"y":0};
@@ -192,7 +241,7 @@
     Pnt1.y=MidPoint.y-Yalign*HexRadius;
     
     Pnt2.x=MidPoint.x+Xalign*HexRadius;
-    Pnt2.y=MidPoint.y+Math.sin(Math.PI/180*30)*HexRadius;
+    Pnt2.y=MidPoint.y+Yalign*HexRadius;
     
     
     Pnt3.x=MidPoint.x;
@@ -215,10 +264,17 @@
      var Hex= evt.target;
      
       
-      var MyTween =TweenMax.to(Hex,1.5,{rotation:90,transformOrigin:"50% 50%",onComplete:myFunction});
+      var MyTween =TweenMax.to(Hex.parentNode ,1.5,{rotation:90,transformOrigin:"50% 50%",onComplete:myFunction});
+      var MyTween1 =TweenMax.to(Hex ,1.5,{rotation:90,transformOrigin:"50% 50%",onComplete:myFunction1});
      function myFunction()
      {
-       //MyTween.reverse();
+        MyTween.reverse();
+       
+     }
+     function myFunction1()
+     {
+      
+        MyTween1.reverse();
      }
    }
    
