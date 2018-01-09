@@ -51,7 +51,7 @@
    
    
    
-   for(i=0;i<36;i++)
+   for(i=0;i<=36;i++)
    {
     HexShapes.push(document.createElementNS(svgns,"polygon"));
    
@@ -173,14 +173,11 @@
      var Pnt12={"x":0,"y":0};
      var AllPnts=[];
      
-     Pnt1.x=MidPoint.x;
-     Pnt1.y=MidPoint.y-Yalign90*HexRadius;
      
-     Pnt2.x=MidPoint.x+Xalign90*HexRadius;
-     Pnt2.y=MidPoint.y-Yalign90*HexRadius;
+     AllPnts.push([MidPoint.x+Xalign90*HexRadius*0/2,MidPoint.y-Yalign90*HexRadius*2/2]);
+     AllPnts.push([MidPoint.x+Xalign90*HexRadius*2/2,MidPoint.y-Yalign90*HexRadius*2/2]);
+     AllPnts.push([MidPoint.x+Xalign90*HexRadius*3/2,MidPoint.y-Yalign90*HexRadius*1/2]);
      
-     Pnt3.x=MidPoint.x+Xalign90*HexRadius*1.5;
-     Pnt3.y=MidPoint.y-Yalign90*HexRadius*.5;
      
      Pnt4.x=MidPoint.x+HexRadius;
      Pnt4.y=MidPoint.y;
@@ -209,9 +206,9 @@
      Pnt12.x=MidPoint.x-Xalign90*HexRadius;
      Pnt12.y=MidPoint.y-Yalign90*HexRadius;
     
-     AllPnts.push([Pnt1.x,Pnt1.y]);
-     AllPnts.push([Pnt2.x,Pnt2.y]);
-     AllPnts.push([Pnt3.x,Pnt3.y]);
+     
+     
+     
      AllPnts.push([Pnt4.x,Pnt4.y]);
      AllPnts.push([Pnt5.x,Pnt5.y]);
      AllPnts.push([Pnt6.x,Pnt6.y]);
@@ -248,10 +245,10 @@
      AllPnts.push([MidPoint.x-Xalign90*HexRadius*3/3,MidPoint.y+Yalign90*HexRadius*3/3]);
      AllPnts.push([MidPoint.x-Xalign90*HexRadius*4/3,MidPoint.y+Yalign90*HexRadius*2/3]);
      AllPnts.push([MidPoint.x-Xalign90*HexRadius*5/3,MidPoint.y+Yalign90*HexRadius*1/3]);
-     AllPnts.push([MidPoint.x-Xalign90*HexRadius*4/3,MidPoint.y+Yalign90*HexRadius*0/3]);
-     AllPnts.push([MidPoint.x-Xalign90*HexRadius*3/3,MidPoint.y-Yalign90*HexRadius*1/3]); 
-     AllPnts.push([MidPoint.x-Xalign90*HexRadius*2/3,MidPoint.y-Yalign90*HexRadius*2/3]);
-     AllPnts.push([MidPoint.x-Xalign90*HexRadius*1/3,MidPoint.y-Yalign90*HexRadius*3/3]); 
+     AllPnts.push([MidPoint.x-Xalign90*HexRadius*6/3,MidPoint.y+Yalign90*HexRadius*0/3]);
+     AllPnts.push([MidPoint.x-Xalign90*HexRadius*5/3,MidPoint.y-Yalign90*HexRadius*1/3]); 
+     AllPnts.push([MidPoint.x-Xalign90*HexRadius*4/3,MidPoint.y-Yalign90*HexRadius*2/3]);
+     AllPnts.push([MidPoint.x-Xalign90*HexRadius*3/3,MidPoint.y-Yalign90*HexRadius*3/3]); 
     
      
     return AllPnts;
