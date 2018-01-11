@@ -90,24 +90,23 @@
    HexShapes[i].setAttribute("id","poly" + i);
    HexShapes[i].setAttribute("stroke-width","8px");
    HexShapes[i].setAttribute("stroke","blue");
+   // HexShapes[i].setAttribute("visibility","hidden");
    
    HexText[i].setAttribute("x",MiddlePoint.x);
    HexText[i].setAttribute("y",MiddlePoint.y);
+   HexText[i].setAttribute("id","text" + i);
+   HexText[i].setAttribute("font-family", "sans-serif");
+   HexText[i].setAttribute("font-size", "80px");
+   HexText[i].setAttribute("text-anchor","middle");
+   HexText[i].setAttribute("fill", "black");
+   HexText[i].textContent=i;
    
-   
+  
    D3Nodes[0].appendChild(HexShapes[i]);
    D3Nodes[0].appendChild(HexText[i]);
    
    }
    
- 
-//       .attr("id",function(d,i){return "text" + i;})
-//       .attr("x",function(d,i){ return 1200+Math.round(BuildHoneyComb(i).split(",")[0]);})
-//       .attr("y",function(d,i){return 800+Math.round(BuildHoneyComb(i).split(",")[1]);})
-//       .attr("font-family", "sans-serif")
-//       .attr("font-size", "80px")
-//       .attr("text-anchor","middle")
-//       .attr("fill", "black")
 //       .attr("visibility","hidden")
 //       .text(function(d,i){return i;});
     
