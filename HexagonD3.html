@@ -28,13 +28,13 @@
 
     
     
-<script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
-<script src="https://d3js.org/d3-polygon.v1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js"></script>
 <script >
-   /*global d3*/
+   
    /*global TweenLite*/
     /*global TweenMax*/
+     /*global annyang*/
     var svgns = "http://www.w3.org/2000/svg";
    var HexRadius = 120;
    var Yalign = Math.sin(Math.PI/180*30);
@@ -109,8 +109,28 @@
    
    }
    
-//       .attr("visibility","hidden")
-//       .text(function(d,i){return i;});
+    var SpinMe = function(i)
+    {
+        
+        var MyTween1 =TweenMax.to(HexShapes[i] ,3,{rotation:360,transformOrigin:"50% 50%",clearProps:"rotation"});
+        
+    }
+   
+  if (annyang) {
+  // Let's define our first command. First the text we expect, and then the function it should call
+  var commands = {
+    '*tag': SpinMe,
+     
+  }
+  
+ 
+
+  // Add our commands to annyang
+  annyang.addCommands(commands);
+
+  // Start listening. You can call this here, or attach this call to an event, button, etc.
+  annyang.start({ autoRestart: true, continuous: false });
+}
     
   
     
@@ -120,7 +140,7 @@
         
     
        
-      
+    
    
    
    
