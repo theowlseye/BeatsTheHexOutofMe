@@ -15,7 +15,7 @@
       <stop offset="150%" style="stop-color:gold;stop-opacity:1" />
     </linearGradient>
    </defs>
-    <g id="AllHexagons" onclick="Hex_Click(evt)">
+    <g id="AllHexagons" onclick="Hex_Click(evt)" ontouchstart="Hex_Click(evt)">
         
     </g>
     
@@ -26,15 +26,12 @@
 
 
 
-    
-    
-<script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js"></script>
 <script >
    
    /*global TweenLite*/
     /*global TweenMax*/
-     /*global annyang*/
+   
     var svgns = "http://www.w3.org/2000/svg";
    var HexRadius = 120;
    var Yalign = Math.sin(Math.PI/180*30);
@@ -109,29 +106,10 @@
    
    }
    
-    var SpinMe = function(i)
-    {
-        
-        var MyTween1 =TweenMax.to(HexShapes[i] ,3,{rotation:360,transformOrigin:"50% 50%",clearProps:"rotation"});
-        
-    }
    
-  if (annyang) {
-  // Let's define our first command. First the text we expect, and then the function it should call
-  var commands = {
-    '*tag': SpinMe,
-     
-  }
+  
   
  
-
-  // Add our commands to annyang
-  annyang.addCommands(commands);
-
-  // Start listening. You can call this here, or attach this call to an event, button, etc.
-  annyang.start({ autoRestart: true, continuous: false });
-}
-    
   
     
     window.onload = function(){
@@ -252,9 +230,15 @@
     // {
     //  var MyTween =TweenMax.to(Hex.parentNode ,1,{rotation:360,transformOrigin:"50% 50%",clearProps:"rotation"});
     // }
+     
      if(!TweenMax.isTweening(Hex))
      {
-      var MyTween1 =TweenMax.to(Hex ,3,{rotation:360,transformOrigin:"50% 50%",clearProps:"rotation"});
+      //figure out the id number
+      var IdNumber=Hex.id.slice(4);
+      
+       
+      var MyTween1 =TweenMax.to(HexShapes[IdNumber] ,1.5,{rotation:360,transformOrigin:"50% 50%",clearProps:"rotation"});
+      var MyTween2 =TweenMax.to(HexText[IdNumber] ,1.5,{rotation:360,transformOrigin:"50% 50%",clearProps:"rotation"});
      }
      
    }
