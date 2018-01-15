@@ -113,7 +113,24 @@
   
     
     window.onload = function(){
-//       var TurnOnNumbers=setTimeout(function(){ D3text.style("visibility","visible"); }, 2500);    
+        for(i=0;i<=36;i++){
+            if(i>0&&i<=6)
+            {
+                var DeployTween = TweenMax.from(HexShapes[i],.5,{x:1200-Tier1MidPoints[i-1][0],y:800-Tier1MidPoints[i-1][1],delay:i*0.15});
+                var DeployTextTween = TweenMax.from(HexText[i],.5,{x:1200-Tier1MidPoints[i-1][0],y:800-Tier1MidPoints[i-1][1],delay:i*0.15});
+            }
+            else if(i>6&&i<=18)
+            {
+                var DeployTween = TweenMax.from(HexShapes[i],.75,{x:1200-Tier2MidPoints[i-7][0],y:800-Tier2MidPoints[i-7][1],delay:i*0.15});
+                var DeployTextTween = TweenMax.from(HexText[i],.75,{x:1200-Tier2MidPoints[i-7][0],y:800-Tier2MidPoints[i-7][1],delay:i*0.15});
+            }
+             else if(i>18&&i<=36)
+            {
+                var DeployTween = TweenMax.from(HexShapes[i],.85,{x:1200-Tier3MidPoints[i-19][0],y:800-Tier3MidPoints[i-19][1],delay:i*0.15});
+                var DeployTextTween = TweenMax.from(HexText[i],.85,{x:1200-Tier3MidPoints[i-19][0],y:800-Tier3MidPoints[i-19][1],delay:i*0.15});
+            }
+        }
+        
     }
         
     
@@ -126,34 +143,16 @@
    function BuildMiddlePntsTier1(MidX,MidY,HexRadius)
    {
      var MidPoint ={"x":MidX,"y":MidY};
-     var Pnt1 = {"x":0,"y":0};
-     var Pnt2 = {"x":0,"y":0};
-     var Pnt3={"x":0,"y":0};
-     var Pnt4={"x":0,"y":0};
-     var Pnt5={"x":0,"y":0};
-     var Pnt6={"x":0,"y":0};
      var AllPnts=[];
-  
-     Pnt1.x=MidPoint.x+Xalign90*HexRadius;
-     Pnt1.y=MidPoint.y-Yalign90*HexRadius;
      
+     AllPnts.push([MidPoint.x+Xalign90*HexRadius*1/1,MidPoint.y-Yalign90*HexRadius*1/1]);
+     AllPnts.push([MidPoint.x+Xalign90*HexRadius*2/1,MidPoint.y-Yalign90*HexRadius*0/1]);
+     AllPnts.push([MidPoint.x+Xalign90*HexRadius*1/1,MidPoint.y+Yalign90*HexRadius*1/1]);
+     AllPnts.push([MidPoint.x-Xalign90*HexRadius*1/1,MidPoint.y+Yalign90*HexRadius*1/1]);
+     AllPnts.push([MidPoint.x-Xalign90*HexRadius*2/1,MidPoint.y-Yalign90*HexRadius*0/1]);
+     AllPnts.push([MidPoint.x-Xalign90*HexRadius*1/1,MidPoint.y-Yalign90*HexRadius*1/1]);
     
-     Pnt2.x=MidPoint.x+HexRadius;
-     Pnt2.y=MidPoint.y;
-    
-     Pnt3.x=MidPoint.x+Xalign90*HexRadius;
-     Pnt3.y=MidPoint.y+Yalign90*HexRadius;
-    
-     Pnt4.x=MidPoint.x-Xalign90*HexRadius;
-     Pnt4.y=MidPoint.y+Yalign90*HexRadius;
-    
-     Pnt5.x=MidPoint.x-HexRadius;
-     Pnt5.y=MidPoint.y;
-     
-     Pnt6.x=MidPoint.x-Xalign90*HexRadius;
-     Pnt6.y=MidPoint.y-Yalign90*HexRadius;
-    
-    return [[Pnt1.x,Pnt1.y],[Pnt2.x,Pnt2.y],[Pnt3.x,Pnt3.y],[Pnt4.x,Pnt4.y],[Pnt5.x,Pnt5.y],[Pnt6.x,Pnt6.y]];   
+     return AllPnts;   
    }
    
    //the middle points of the next tier form a hexagon rotated 90
