@@ -127,8 +127,8 @@
    {
         HexShapes[0].addEventListener("click",Hex_Click);
         HexText[0].addEventListener("click",Hex_Click);    
-        HexText[0].addEventListener("touchstart",Hex_Click);
-        HexShape[0].addEventListener("touchstart",Hex_Click);
+        HexText[0].addEventListener("touchstart",Hex_Click,false);
+        HexShape[0].addEventListener("touchstart",Hex_Click,false);
        for(i=0;i<=36;i++){
             if(i>0&&i<=6)
             {
