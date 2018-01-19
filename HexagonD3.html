@@ -16,7 +16,7 @@
       <stop offset="99%" style="stop-color:black;stop-opacity:1" />
     </linearGradient>
    </defs>
-    <g id="AllHexagons"  ontouchstart="Hex_Click(evt)">
+    <g id="AllHexagons">
         
     </g>
     
@@ -127,6 +127,8 @@
    {
         HexShapes[0].addEventListener("click",Hex_Click);
         HexText[0].addEventListener("click",Hex_Click);    
+        HexText[0].addEventListener("touchstart",Hex_Click);
+        HexShape[0].addEventListener("touchstart",Hex_Click);
        for(i=0;i<=36;i++){
             if(i>0&&i<=6)
             {
