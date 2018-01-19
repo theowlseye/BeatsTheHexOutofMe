@@ -117,9 +117,6 @@
         DeployHexs();
         //pause
         
-        
-        
-        
     }
      
    
@@ -127,12 +124,12 @@
    {
         HexShapes[0].addEventListener("click",Hex_Click);
         HexText[0].addEventListener("click",Hex_Click);    
-        //HexText[0].addEventListener("touchstart",Hex_Click,false);
-        //HexShape[0].addEventListener("touchstart",Hex_Click,false);
+        HexText[0].addEventListener("touchstart",Hex_Click,false);
+        HexShape[0].addEventListener("touchstart",Hex_Click,false);
        for(i=0;i<=36;i++){
             if(i>0&&i<=6)
             {
-                alert("inside loop");
+                
                 var DeployTween = TweenMax.from(HexShapes[i],.5,{x:1200-Tier1MidPoints[i-1][0],y:800-Tier1MidPoints[i-1][1],delay:i*0.15});
                 var DeployTextTween = TweenMax.from(HexText[i],.5,{x:1200-Tier1MidPoints[i-1][0],y:800-Tier1MidPoints[i-1][1],delay:i*0.15});
                 //HexShapes[i].addEventListener("click",Hex_Click);
