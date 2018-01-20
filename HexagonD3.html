@@ -5,9 +5,9 @@
 
     </head>
 <body>
-   <h1>Hexagons</h1>
-        <p>Welcome to the hive</p>
-<svg width="26cm" height="15cm" viewBox="0 0 2400 1600"
+   <h1>Welcome to the hive</h1>
+        <h2>Click the center hexagon to begin the game.</h2>
+<svg width="24cm" height="13cm" viewBox="0 0 2400 1600"
      xmlns="http://www.w3.org/2000/svg" version="1.1">
      <defs>
     <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -19,6 +19,11 @@
       <stop id="GoldOffset2" offset="50%" style="stop-color:gold;stop-opacity:1" />
       <stop id="OrangeOffset2" offset="98%" style="stop-color:orange;stop-opacity:1" />
       <stop id="BlackOffset2" offset="99%" style="stop-color:black;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop id="GoldOffset3" offset="50%" style="stop-color:gold;stop-opacity:1" />
+      <stop id="OrangeOffset3" offset="98%" style="stop-color:orange;stop-opacity:1" />
+      <stop id="BlackOffset3" offset="99%" style="stop-color:black;stop-opacity:1" />
     </linearGradient>
    </defs>
     <g id="AllHexagons">
@@ -37,6 +42,7 @@
    
    /*global TweenLite*/
     /*global TweenMax*/
+    /*global SlowMo*/
    
     var svgns = "http://www.w3.org/2000/svg";
    var HexRadius = 120;
@@ -53,6 +59,7 @@
    var Tier3MidPoints=BuildMiddlePntsTier3(1200,800,HexRadius*Xalign*6);
    var MyTween;
    var HexColor="orange";
+   var HasTheGameStarted;
    // Hexagons.push(BuildHex(1200,800));
    //var D3svgs = document.getElementsByTagName("svg");
    
@@ -60,7 +67,7 @@
    var i;
    
    
-   
+   //create all the Hexagons in the hive
    for(i=0;i<=36;i++)
    {
     HexShapes.push(document.createElementNS(svgns,"polygon"));
@@ -90,7 +97,7 @@
    {
        MiddlePoint.x=Tier3MidPoints[i-19][0];
        MiddlePoint.y=Tier3MidPoints[i-19][1];
-       HexShapes[i].setAttribute("fill","url(#grad2)");
+       HexShapes[i].setAttribute("fill","url(#grad3)");
    }
    //use the middle point to create the next hexagon
    Hexagons.push(BuildHex(MiddlePoint.x,MiddlePoint.y,HexRadius));
@@ -115,10 +122,6 @@
    
    }
    
-   
-  
-  
- 
   
     
     window.onload = function(){
@@ -155,12 +158,14 @@
             {
                 var DeployTween = TweenMax.from(HexShapes[i],.85,{x:1200-Tier3MidPoints[i-19][0],y:800-Tier3MidPoints[i-19][1],delay:i*0.15});
                 var DeployTextTween = TweenMax.from(HexText[i],.85,{x:1200-Tier3MidPoints[i-19][0],y:800-Tier3MidPoints[i-19][1],delay:i*0.15});
-                //var MyTweenGoDark1= TweenMax.to(HexShapes[i],.5,{fill:"#000000",delay:i*.2});
             }
         }
-        TweenMax.to("#GoldOffset2",1.5,{attr:{"offset":"1%"},delay:6});
-        TweenMax.to("#OrangeOffset2",3.5,{attr:{"offset":"2%"},delay:6});
-        TweenMax.to("#BlackOffset2",5.5,{attr:{"offset":"3%"},delay:7});
+        TweenMax.to("#GoldOffset2",1,{attr:{"offset":"1%"},delay:1.5,ease: SlowMo.ease.config(0.3, 0.7, false)});
+        TweenMax.to("#OrangeOffset2",1.5,{attr:{"offset":"2%"},delay:1.5,ease: SlowMo.ease.config(0.3, 0.7, false)});
+        TweenMax.to("#BlackOffset2",2,{attr:{"offset":"3%"},delay:1.7,ease: SlowMo.ease.config(0.3, 0.7, false)});
+        TweenMax.to("#GoldOffset3",1,{attr:{"offset":"1%"},delay:6,ease: SlowMo.ease.config(0.3, 0.7, false)});
+        TweenMax.to("#OrangeOffset3",1.5,{attr:{"offset":"2%"},delay:6,ease: SlowMo.ease.config(0.3, 0.7, false)});
+        TweenMax.to("#BlackOffset3",2,{attr:{"offset":"3%"},delay:6.2,ease: SlowMo.ease.config(0.3, 0.7, false)});
    }
     
    
@@ -251,21 +256,24 @@
    function Hex_Click(evt)
    {
      var Hex= evt.target;
-     
-    // if(!TweenMax.isTweening(Hex.parentNode))
-    // {
-    //  var MyTween =TweenMax.to(Hex.parentNode ,1,{rotation:360,transformOrigin:"50% 50%",clearProps:"rotation"});
-    // }
+   
      
      if(!TweenMax.isTweening(Hex))
      {
       //figure out the id number
       var IdNumber=Hex.id.slice(4);
       
-       
-      var MyTween1 =TweenMax.to(HexShapes[IdNumber] ,1.5,{rotation:360,transformOrigin:"50% 50%",clearProps:"rotation"});
-      var MyTween2 =TweenMax.to(HexText[IdNumber] ,1.5,{rotation:360,transformOrigin:"50% 50%",clearProps:"rotation"});
-     }
+      if(IdNumber==0&&!HasTheGameStarted){
+          HasTheGameStarted=true;
+      } 
+      
+      if(HasTheGameStarted)
+      {
+        var MyTween1 =TweenMax.to(HexShapes[IdNumber] ,1.5,{rotation:360,transformOrigin:"50% 50%",clearProps:"rotation"});
+        var MyTween2 =TweenMax.to(HexText[IdNumber] ,1.5,{rotation:360,transformOrigin:"50% 50%",clearProps:"rotation"});
+      }
+          
+      }
      
    }
    
