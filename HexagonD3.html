@@ -26,6 +26,11 @@
       <stop id="OrangeOffset3" offset="98%" style="stop-color:orange;stop-opacity:1" />
       <stop id="BlackOffset3" offset="99%" style="stop-color:black;stop-opacity:1" />
     </linearGradient>
+     <linearGradient id="ProgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop id="ProgWhiteOffset" offset="97%" style="stop-color:white;stop-opacity:1" />
+      <stop id="ProgGoldOffset" offset="98%" style="stop-color:gold;stop-opacity:1" />
+      <stop id="ProgOrangeOffset" offset="99%" style="stop-color:orange;stop-opacity:1" />
+    </linearGradient>
    </defs>
     <g id="AllHexagons">
         
@@ -129,7 +134,7 @@
    //create the progress 
    HexShapes.push(document.createElementNS(svgns,"polygon"));
    HexShapes[37].setAttribute("points",BuildHex(ProgMidPnt.x,ProgMidPnt.y,HexRadius).join(" "));
-   HexShapes[37].setAttribute("fill","white");
+   HexShapes[37].setAttribute("fill","url(#ProgGrad)");
    HexShapes[37].setAttribute("id","poly" + 37);
    HexShapes[37].setAttribute("stroke-width","8px");
    HexShapes[37].setAttribute("stroke","blue");
@@ -277,12 +282,17 @@
       
       if(IdNumber==0&&!HasTheGameStarted){
           HasTheGameStarted=true;
+          //Change the direction to a math probelm
+          
       } 
       
       if(HasTheGameStarted)
       {
         var MyTween1 =TweenMax.to(HexShapes[IdNumber] ,1.5,{rotation:360,transformOrigin:"50% 50%",clearProps:"rotation"});
         var MyTween2 =TweenMax.to(HexText[IdNumber] ,1.5,{rotation:360,transformOrigin:"50% 50%",clearProps:"rotation"});
+        //increase the Progress Hex
+        var MyTween3=TweenMax.to("#ProgWhiteOffset",.5,{attr:{"offset":"1%"}});  
+        var MyTween4=TweenMax.to("#ProgGoldOffset",.5,{attr:{"offset":"2%"}});  
       }
           
       }
