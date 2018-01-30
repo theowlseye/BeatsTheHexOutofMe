@@ -71,7 +71,7 @@
    var HasTheGameStarted;
    // Hexagons.push(BuildHex(1200,800));
    //var D3svgs = document.getElementsByTagName("svg");
-   
+   var MathProblems =document.getElementsByTagName("h2");
    var D3Nodes=document.getElementsByTagName("g");
    var i;
    
@@ -283,7 +283,7 @@
       if(IdNumber==0&&!HasTheGameStarted){
           HasTheGameStarted=true;
           //Change the direction to a math probelm
-          
+          MathProblems[0].innerHTML=0;
       } 
       
       if(HasTheGameStarted)
