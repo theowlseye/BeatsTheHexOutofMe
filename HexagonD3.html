@@ -51,6 +51,7 @@
    /*global TweenLite*/
     /*global TweenMax*/
     /*global SlowMo*/
+    /*global TimelineLite*/
    
     var svgns = "http://www.w3.org/2000/svg";
    var HexRadius = 120;
@@ -71,10 +72,14 @@
    var HasTheGameStarted;
    // Hexagons.push(BuildHex(1200,800));
    //var D3svgs = document.getElementsByTagName("svg");
-   var MathProblems =document.getElementsByTagName("h2");
+   var MathProblems =document.getElementsByTagName("h1");
+   var Instructions =document.getElementsByTagName("h2");
    var D3Nodes=document.getElementsByTagName("g");
    var i;
-   
+   //instantiate a TimelineLite    
+   var MyTimeLine = new TimelineLite();
+   var MyTimeLineTxt = new TimelineLite(); 
+   var MyTimeLineProg = new TimelineLite(); 
    
    //create all the Hexagons in the hive
    for(i=0;i<=36;i++)
@@ -143,8 +148,21 @@
     
     window.onload = function(){
         DeployHexs();
-        //pause
-        
+        //start progress timeline
+        MyTimeLineProg.to("#ProgWhiteOffset",3,{attr:{"offset":"1%"}})
+                      .to("#ProgGoldOffset",3,{attr:{"offset":"2%"}},"-=3");
+        MyTimeLineProg.addPause(.001);              
+        MyTimeLineProg.addPause(.25);
+        MyTimeLineProg.addPause(.5);
+        MyTimeLineProg.addPause(.75);
+        MyTimeLineProg.addPause(1);
+        MyTimeLineProg.addPause(1.25);
+        MyTimeLineProg.addPause(1.5);
+        MyTimeLineProg.addPause(1.75);
+        MyTimeLineProg.addPause(2);
+        MyTimeLineProg.addPause(2.25);
+        MyTimeLineProg.addPause(2.5);
+        MyTimeLineProg.addPause(2.75);
     }
      
    
@@ -158,8 +176,9 @@
             if(i>0&&i<=6)
             {
                 
-                var DeployTween = TweenMax.from(HexShapes[i],.5,{x:1200-Tier1MidPoints[i-1][0],y:800-Tier1MidPoints[i-1][1],delay:i*0.15});
-                var DeployTextTween = TweenMax.from(HexText[i],.5,{x:1200-Tier1MidPoints[i-1][0],y:800-Tier1MidPoints[i-1][1],delay:i*0.15});
+                //t1.from(HexShapes[i],.5,{x:1200-Tier1MidPoints[i-1][0],y:800-Tier1MidPoints[i-1][1],delay:i*0.15});
+                MyTimeLine.from(HexShapes[i],.4,{x:1200-Tier1MidPoints[i-1][0],y:800-Tier1MidPoints[i-1][1]},"-=.3");
+                MyTimeLineTxt.from(HexText[i],.4,{x:1200-Tier1MidPoints[i-1][0],y:800-Tier1MidPoints[i-1][1]},"-=.3");
                 HexShapes[i].addEventListener("mousedown",Hex_Click);
                 HexText[i].addEventListener("mousedown",Hex_Click);
                 HexText[i].addEventListener("touchstart",Hex_Click);
@@ -167,22 +186,22 @@
             }
             else if(i>6&&i<=18)
             {
-                var DeployTween = TweenMax.from(HexShapes[i],.75,{x:1200-Tier2MidPoints[i-7][0],y:800-Tier2MidPoints[i-7][1],delay:i*0.15});
-                var DeployTextTween = TweenMax.from(HexText[i],.75,{x:1200-Tier2MidPoints[i-7][0],y:800-Tier2MidPoints[i-7][1],delay:i*0.15});
+                MyTimeLine.from(HexShapes[i],.5,{x:1200-Tier2MidPoints[i-7][0],y:800-Tier2MidPoints[i-7][1]},"-=.4");
+                MyTimeLineTxt.from(HexText[i],.5,{x:1200-Tier2MidPoints[i-7][0],y:800-Tier2MidPoints[i-7][1]},"-=.4");
                 
             }
              else if(i>18&&i<=36)
             {
-                var DeployTween = TweenMax.from(HexShapes[i],.85,{x:1200-Tier3MidPoints[i-19][0],y:800-Tier3MidPoints[i-19][1],delay:i*0.15});
-                var DeployTextTween = TweenMax.from(HexText[i],.85,{x:1200-Tier3MidPoints[i-19][0],y:800-Tier3MidPoints[i-19][1],delay:i*0.15});
+                MyTimeLine.from(HexShapes[i],.6,{x:1200-Tier3MidPoints[i-19][0],y:800-Tier3MidPoints[i-19][1]},"-=.5");
+                MyTimeLineTxt.from(HexText[i],.6,{x:1200-Tier3MidPoints[i-19][0],y:800-Tier3MidPoints[i-19][1]},"-=.5");
             }
         }
-        TweenMax.to("#GoldOffset2",1,{attr:{"offset":"1%"},delay:1.5,ease: SlowMo.ease.config(0.3, 0.7, false)});
-        TweenMax.to("#OrangeOffset2",1.5,{attr:{"offset":"2%"},delay:1.5,ease: SlowMo.ease.config(0.3, 0.7, false)});
-        TweenMax.to("#BlackOffset2",2,{attr:{"offset":"3%"},delay:1.7,ease: SlowMo.ease.config(0.3, 0.7, false)});
-        TweenMax.to("#GoldOffset3",1,{attr:{"offset":"1%"},delay:6,ease: SlowMo.ease.config(0.3, 0.7, false)});
-        TweenMax.to("#OrangeOffset3",1.5,{attr:{"offset":"2%"},delay:6,ease: SlowMo.ease.config(0.3, 0.7, false)});
-        TweenMax.to("#BlackOffset3",2,{attr:{"offset":"3%"},delay:6.2,ease: SlowMo.ease.config(0.3, 0.7, false)});
+        MyTimeLine.to("#GoldOffset2",.5,{attr:{"offset":"1%"},ease: SlowMo.ease.config(0.3, 0.7, false)});
+        MyTimeLine.to("#OrangeOffset2",1,{attr:{"offset":"2%"},ease: SlowMo.ease.config(0.3, 0.7, false)},"-=.5");
+        MyTimeLine.to("#BlackOffset2",1.5,{attr:{"offset":"3%"},ease: SlowMo.ease.config(0.3, 0.7, false)},"-=1");
+        MyTimeLineTxt.to("#GoldOffset3",.5,{attr:{"offset":"1%"},ease: SlowMo.ease.config(0.3, 0.7, false)});
+        MyTimeLineTxt.to("#OrangeOffset3",1,{attr:{"offset":"2%"},ease: SlowMo.ease.config(0.3, 0.7, false)},"-=.5");
+        MyTimeLineTxt.to("#BlackOffset3",1.5,{attr:{"offset":"3%"},ease: SlowMo.ease.config(0.3, 0.7, false)},"-=1");
    }
     
    
@@ -283,16 +302,29 @@
       if(IdNumber==0&&!HasTheGameStarted){
           HasTheGameStarted=true;
           //Change the direction to a math probelm
-          MathProblems[0].innerHTML=0;
+          MathProblems[0].innerHTML="0";
+          Instructions[0].innerHTML="Tap the Hex with the correct answer.";
+          return;
       } 
       
       if(HasTheGameStarted)
       {
-        var MyTween1 =TweenMax.to(HexShapes[IdNumber] ,1.5,{rotation:360,transformOrigin:"50% 50%",clearProps:"rotation"});
-        var MyTween2 =TweenMax.to(HexText[IdNumber] ,1.5,{rotation:360,transformOrigin:"50% 50%",clearProps:"rotation"});
-        //increase the Progress Hex
-        var MyTween3=TweenMax.to("#ProgWhiteOffset",.5,{attr:{"offset":"1%"}});  
-        var MyTween4=TweenMax.to("#ProgGoldOffset",.5,{attr:{"offset":"2%"}});  
+        var MyTween1 =TweenMax.to(HexShapes[IdNumber] ,1,{rotation:360,transformOrigin:"50% 50%",clearProps:"rotation"});
+        var MyTween2 =TweenMax.to(HexText[IdNumber] ,1,{rotation:360,transformOrigin:"50% 50%",clearProps:"rotation"});
+        //if answer is correct
+        if(IdNumber==0)
+        {
+          //increase the Progress Hex
+          MyTimeLineProg.resume();
+        }
+        else
+        {
+          //restart
+          MyTimeLineProg.restart();
+          
+        }
+        
+         
       }
           
       }
