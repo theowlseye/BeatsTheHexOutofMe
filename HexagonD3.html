@@ -35,7 +35,8 @@
     <g id="AllHexagons">
         
     </g>
-    
+     <path id="arcTimerOuter" d="" stroke="white" fill="blue"/>
+     
 </svg>  
 <style type="text/css">
   body{-webkit-backface-visibility: hidden;
@@ -46,12 +47,14 @@
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js"></script>
+<script src="//d3js.org/d3.v5.min.js"></script>
 <script >
    
    /*global TweenLite*/
     /*global TweenMax*/
     /*global SlowMo*/
     /*global TimelineLite*/
+    /*global d3*/
    
     var svgns = "http://www.w3.org/2000/svg";
    var HexRadius = 120;
@@ -80,7 +83,60 @@
    var MyTimeLine = new TimelineLite();
    var MyTimeLineTxt = new TimelineLite(); 
    var MyTimeLineProg = new TimelineLite(); 
+   var MyTimeLineTimer = new TimelineLite();
+   //create arc path
+   var arcTimerOuterElement=document.getElementById("arcTimerOuter");
+   //var PathArcTimerOuterStr = " a 100,100, 0, 0, 1, 50,  50 ";
+   var MyArc = d3.arc()
+               .innerRadius(80)
+               .outerRadius(100)
+               .startAngle(0)
+               ;
+    //var MyArc2 = d3.arc()
+    //           .innerRadius(80)
+    //           .outerRadius(100)
+    //           .startAngle(0)
+    //           .endAngle(2*Math.PI);           
+   var D3arc=d3.select("#arcTimerOuter");
    
+   TweenMax.set("#arcTimerOuter",{x:1840,y:300});
+    arcTimerOuterElement.setAttribute("stroke-width","8px");
+   //TweenMax.set("#arcTimerOuter",{attr:{d:MyArc()}});
+   
+   D3arc.datum({endAngle: .5*Math.PI})
+   .style("fill", "blue")
+    .attr("d", MyArc);
+ 
+    D3arc.transition()
+      .duration(2000)
+      .attrTween("d", arcTween(2*Math.PI));
+      
+    function arcTween(newAngle) {
+       
+        return function(d) {
+           
+
+          var interpolate = d3.interpolate(d.endAngle, newAngle);
+
+        return function(t) {
+         // correct starting angle can be inferred from the data.
+             
+             d.endAngle = interpolate(t);
+
+        return MyArc(d);
+    };
+  };
+    }
+     
+   //alert(MyArc2()); 
+       
+   
+   //arcTimerOuterElement.setAttribute("d",PathArcTimerOuterStr);
+  
+   //TweenMax.to("#arcTimerOuter",1,{});
+  //MyTimeLineTimer.to(arcTimerOuterElement,1,{attr:{d:MyArc2()}});
+   
+  
    //create all the Hexagons in the hive
    for(i=0;i<=36;i++)
    {
@@ -144,6 +200,9 @@
    HexShapes[37].setAttribute("stroke-width","8px");
    HexShapes[37].setAttribute("stroke","blue");
    D3Nodes[0].appendChild(HexShapes[37]);
+   //create the timer
+   //far  arc
+   //close arc
    
     
     window.onload = function(){
