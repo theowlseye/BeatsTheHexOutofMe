@@ -73,6 +73,8 @@
    var MyTween;
    var HexColor="orange";
    var HasTheGameStarted;
+   var TimeOutFlg;
+   var MathQuestion;
    // Hexagons.push(BuildHex(1200,800));
    //var D3svgs = document.getElementsByTagName("svg");
    var MathProblems =document.getElementsByTagName("h1");
@@ -103,13 +105,11 @@
     arcTimerOuterElement.setAttribute("stroke-width","8px");
    //TweenMax.set("#arcTimerOuter",{attr:{d:MyArc()}});
    
-   D3arc.datum({endAngle: .5*Math.PI})
+   D3arc.datum({endAngle: 0})
    .style("fill", "blue")
     .attr("d", MyArc);
  
-    D3arc.transition()
-      .duration(2000)
-      .attrTween("d", arcTween(2*Math.PI));
+   
       
     function arcTween(newAngle) {
        
@@ -122,7 +122,7 @@
          // correct starting angle can be inferred from the data.
              
              d.endAngle = interpolate(t);
-
+             
         return MyArc(d);
     };
   };
@@ -361,8 +361,13 @@
       if(IdNumber==0&&!HasTheGameStarted){
           HasTheGameStarted=true;
           //Change the direction to a math probelm
-          MathProblems[0].innerHTML="0";
+          MathQuestion=Math.floor(Math.random()*6);
+          MathProblems[0].innerHTML=MathQuestion;
           Instructions[0].innerHTML="Tap the Hex with the correct answer.";
+          //start the timer
+           D3arc.transition()
+           .duration(5000)
+           .attrTween("d", arcTween(2*Math.PI));
           return;
       } 
       
@@ -370,11 +375,24 @@
       {
         var MyTween1 =TweenMax.to(HexShapes[IdNumber] ,1,{rotation:360,transformOrigin:"50% 50%",clearProps:"rotation"});
         var MyTween2 =TweenMax.to(HexText[IdNumber] ,1,{rotation:360,transformOrigin:"50% 50%",clearProps:"rotation"});
+        //set timer to 0
+          D3arc.transition()
+           .duration(0)
+           .attrTween("d", arcTween(0));
+          //restart timer
+          D3arc.transition()
+           .duration(5000)
+           .on("end", TimesUp)
+           .attrTween("d", arcTween(2*Math.PI));
+        
         //if answer is correct
-        if(IdNumber==0)
+        if(IdNumber==MathQuestion)
         {
           //increase the Progress Hex
           MyTimeLineProg.resume();
+          MathQuestion=Math.floor(Math.random()*6);
+          MathProblems[0].innerHTML=MathQuestion;
+          
         }
         else
         {
@@ -390,7 +408,20 @@
      
    }
    
-   
+   function TimesUp()
+   {
+       D3arc.transition()
+           .duration(0)
+           .attrTween("d", arcTween(0));
+           
+        D3arc.transition()
+           .duration(5000)
+           .on("end", TimesUp)
+           .attrTween("d", arcTween(2*Math.PI));
+        //restart
+          MyTimeLineProg.restart();   
+       
+   }
 </script>
 
 </body>
