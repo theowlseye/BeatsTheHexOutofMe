@@ -75,12 +75,14 @@
    var HasTheGameStarted;
    var TimeOutFlg;
    var MathQuestion;
+   var MyTimerDuration=5000;
    // Hexagons.push(BuildHex(1200,800));
    //var D3svgs = document.getElementsByTagName("svg");
    var MathProblems =document.getElementsByTagName("h1");
    var Instructions =document.getElementsByTagName("h2");
    var D3Nodes=document.getElementsByTagName("g");
    var i;
+   
    //instantiate a TimelineLite    
    var MyTimeLine = new TimelineLite();
    var MyTimeLineTxt = new TimelineLite(); 
@@ -209,7 +211,7 @@
         DeployHexs();
         //start progress timeline
         MyTimeLineProg.to("#ProgWhiteOffset",3,{attr:{"offset":"1%"}})
-                      .to("#ProgGoldOffset",3,{attr:{"offset":"2%"}},"-=3");
+                      .to("#ProgGoldOffset",3,{attr:{"offset":"2%"},onComplete:LevelComplete},"-=3");
         MyTimeLineProg.addPause(.001);              
         MyTimeLineProg.addPause(.25);
         MyTimeLineProg.addPause(.5);
@@ -366,7 +368,8 @@
           Instructions[0].innerHTML="Tap the Hex with the correct answer.";
           //start the timer
            D3arc.transition()
-           .duration(5000)
+           .duration(MyTimerDuration)
+           .on("end", TimesUp)
            .attrTween("d", arcTween(2*Math.PI));
           return;
       } 
@@ -381,7 +384,7 @@
            .attrTween("d", arcTween(0));
           //restart timer
           D3arc.transition()
-           .duration(5000)
+           .duration(MyTimerDuration)
            .on("end", TimesUp)
            .attrTween("d", arcTween(2*Math.PI));
         
@@ -415,12 +418,26 @@
            .attrTween("d", arcTween(0));
            
         D3arc.transition()
-           .duration(5000)
+           .duration(MyTimerDuration)
            .on("end", TimesUp)
            .attrTween("d", arcTween(2*Math.PI));
         //restart
           MyTimeLineProg.restart();   
        
+   }
+   
+   function LevelComplete()
+   {
+       MyTimerDuration=4000;
+       D3arc.transition()
+           .duration(0)
+           .attrTween("d", arcTween(0));
+           
+        D3arc.transition()
+           .duration(MyTimerDuration)
+           .on("end", TimesUp)
+           .attrTween("d", arcTween(2*Math.PI));
+       D3arc.style("fill","green");
    }
 </script>
 
