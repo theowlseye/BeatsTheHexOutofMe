@@ -82,6 +82,7 @@
    var Instructions =document.getElementsByTagName("h2");
    var D3Nodes=document.getElementsByTagName("g");
    var i;
+   var MyLevel=0;
    
    //instantiate a TimelineLite    
    var MyTimeLine = new TimelineLite();
@@ -92,7 +93,7 @@
    var arcTimerOuterElement=document.getElementById("arcTimerOuter");
    //var PathArcTimerOuterStr = " a 100,100, 0, 0, 1, 50,  50 ";
    var MyArc = d3.arc()
-               .innerRadius(80)
+               .innerRadius(60)
                .outerRadius(100)
                .startAngle(0)
                ;
@@ -393,7 +394,12 @@
         {
           //increase the Progress Hex
           MyTimeLineProg.resume();
+          var PreviousMathQuestion=MathQuestion;
           MathQuestion=Math.floor(Math.random()*6);
+          while(MathQuestion==PreviousMathQuestion)
+          {
+              MathQuestion=Math.floor(Math.random()*6);
+          }
           MathProblems[0].innerHTML=MathQuestion;
           
         }
@@ -428,7 +434,35 @@
    
    function LevelComplete()
    {
-       MyTimerDuration=4000;
+       MyLevel++;
+       if(MyLevel==1)
+       {
+         MyTimerDuration=4000;
+          D3arc.style("fill","cyan");
+       }
+       else if(MyLevel==2)
+       {
+           MyTimerDuration=2000;
+            D3arc.style("fill","green");
+       }
+       else if(MyLevel==3)
+       {
+           MyTimerDuration=1500;
+            D3arc.style("fill","orange");
+       }
+       else if(MyLevel==4)
+       {
+           MyTimerDuration=1000;
+            D3arc.style("fill","red");
+       }
+       else if(MyLevel==5)
+       {
+          //unlock master level 
+       }
+       
+       //restart
+       MyTimeLineProg.restart();
+       
        D3arc.transition()
            .duration(0)
            .attrTween("d", arcTween(0));
@@ -437,7 +471,8 @@
            .duration(MyTimerDuration)
            .on("end", TimesUp)
            .attrTween("d", arcTween(2*Math.PI));
-       D3arc.style("fill","green");
+      
+       
    }
 </script>
 
