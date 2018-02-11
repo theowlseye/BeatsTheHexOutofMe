@@ -61,6 +61,7 @@
    /*global TweenLite*/
     /*global TweenMax*/
     /*global SlowMo*/
+    /*global Power0*/
     /*global TimelineLite*/
     /*global d3*/
    
@@ -93,6 +94,8 @@
    var D3Nodes=document.getElementsByTagName("g");
    var i;
    var MyLevel=0;
+   var MyEQLevel=0;
+   var MyTierLevel=0;
    
    //instantiate a TimelineLite    
    var MyTimeLine = new TimelineLite();
@@ -207,8 +210,8 @@
     window.onload = function(){
         DeployHexs();
         //start progress timeline
-        MyTimeLineProg.to("#ProgWhiteOffset",3,{attr:{"offset":"1%"}})
-                      .to("#ProgGoldOffset",3,{attr:{"offset":"2%"},onComplete:LevelComplete},"-=3");
+        MyTimeLineProg.to("#ProgWhiteOffset",3,{attr:{"offset":"1%"},ease: Power0.easeNone})
+                      .to("#ProgGoldOffset",3,{attr:{"offset":"2%"},ease: Power0.easeNone,onComplete:LevelComplete},"-=3");
         MyTimeLineProg.addPause(.001);              
         MyTimeLineProg.addPause(.25);
         MyTimeLineProg.addPause(.5);
@@ -254,12 +257,12 @@
                 MyTimeLineTxt.from(HexText[i],.6,{x:1200-Tier3MidPoints[i-19][0],y:800-Tier3MidPoints[i-19][1]},"-=.5");
             }
         }
-        MyTimeLine.add(MyTimeLineFade1.to("#GoldOffset2",.5,{attr:{"offset":"1%"},ease: SlowMo.ease.config(0.3, 0.7, false)})
-        .to("#OrangeOffset2",1,{attr:{"offset":"2%"},ease: SlowMo.ease.config(0.3, 0.7, false)},"-=.5")
-        .to("#BlackOffset2",1.5,{attr:{"offset":"3%"},ease: SlowMo.ease.config(0.3, 0.7, false)},"-=1"));
-        MyTimeLineTxt.to("#GoldOffset3",.5,{attr:{"offset":"1%"},ease: SlowMo.ease.config(0.3, 0.7, false)});
-        MyTimeLineTxt.to("#OrangeOffset3",1,{attr:{"offset":"2%"},ease: SlowMo.ease.config(0.3, 0.7, false)},"-=.5");
-        MyTimeLineTxt.to("#BlackOffset3",1.5,{attr:{"offset":"3%"},ease: SlowMo.ease.config(0.3, 0.7, false)},"-=1");
+        MyTimeLineFade1.to("#GoldOffset2",.5,{attr:{"offset":"1%"},ease: SlowMo.ease.config(0.3, 0.7, false)},3)
+                       .to("#OrangeOffset2",1,{attr:{"offset":"2%"},ease: SlowMo.ease.config(0.3, 0.7, false)},"-=.5")
+                       .to("#BlackOffset2",1.5,{attr:{"offset":"3%"},ease: SlowMo.ease.config(0.3, 0.7, false)},"-=1");
+        MyTimeLineFade2.to("#GoldOffset3",.5,{attr:{"offset":"1%"},ease: SlowMo.ease.config(0.3, 0.7, false)},4)
+                       .to("#OrangeOffset3",1,{attr:{"offset":"2%"},ease: SlowMo.ease.config(0.3, 0.7, false)},"-=.5")
+                       .to("#BlackOffset3",1.5,{attr:{"offset":"3%"},ease: SlowMo.ease.config(0.3, 0.7, false)},"-=1");
    }
     
    
@@ -363,7 +366,14 @@
           MathSolution=Math.floor(Math.random()*6);
           MathQuestion1=Math.floor(Math.random()*MathSolution);
           MathQuestion2=MathSolution-MathQuestion1;
-          MathProblems[0].innerHTML=MathQuestion1 + " + " + MathQuestion2;
+          if(MyEQLevel==0)
+          {
+              MathProblems[0].innerHTML=MathSolution;
+          }
+          else if(MyEQLevel==1)
+          {
+           MathProblems[0].innerHTML=MathQuestion1 + " + " + MathQuestion2;
+          }
           Instructions[0].style.color="white";
      
           //start the timer
@@ -371,6 +381,7 @@
            .duration(MyTimerDuration)
            .on("end", TimesUp)
            .attrTween("d", arcTween(2*Math.PI));
+          
           return;
       } 
       
@@ -394,15 +405,7 @@
           //increase the Progress Hex
           MyTimeLineProg.play();
           MyTimeLineProg.resume();
-          var PreviousMathSolution=MathSolution;
-          MathSolution=Math.floor(Math.random()*6);
-          while(MathSolution==PreviousMathSolution)
-          {
-              MathSolution=Math.floor(Math.random()*6);
-          }
-          MathQuestion1=Math.floor(Math.random()*MathSolution);
-          MathQuestion2=MathSolution-MathQuestion1;
-          MathProblems[0].innerHTML=MathQuestion1 + " + " + MathQuestion2;
+          CreateMathProblem();
           
           
         }
@@ -441,7 +444,6 @@
        MyLevel++;
        if(MyLevel==1)
        {
-         MyTimeLineFade1.reverse();
          MyTimerDuration=3000;
           D3arc.style("fill","blue");
        }
@@ -462,16 +464,30 @@
        }
        else if(MyLevel==5)
        {
-          //unlock master level
-          //add listeners
-          for(var k=6;k<=18;k++)
-          {
-           HexShapes[k].addEventListener("mousedown",Hex_Click);
-           HexText[k].addEventListener("mousedown",Hex_Click);    
-           HexText[k].addEventListener("touchstart",Hex_Click,false);
-           HexShapes[k].addEventListener("touchstart",Hex_Click,false);
+          //unlock next Equation level
+          MyEQLevel++;
+          
+            
+           //resset level to 0
+           MyLevel=0;
+           MyTimerDuration=5000;
+           D3arc.style("fill","purple");
+           //if equation level at 1 reset 
+           if(MyEQLevel==2){MyEQLevel=0;MyTierLevel++;}
+           //if at the next tier
+           if(MyTierLevel==1)
+           {
+            //add listeners
+            for(var k=6;k<=18;k++)
+            {
+             HexShapes[k].addEventListener("mousedown",Hex_Click);
+             HexText[k].addEventListener("mousedown",Hex_Click);    
+             HexText[k].addEventListener("touchstart",Hex_Click,false);
+             HexShapes[k].addEventListener("touchstart",Hex_Click,false);
+            }
+            MyTimeLineFade1.reverse();
           } 
-          MyTimeLineFade1.reverse();
+          CreateMathProblem();
        }
        
        //restart
@@ -489,7 +505,25 @@
        
    }
    
- 
+   function CreateMathProblem()
+   {
+       var PreviousMathSolution=MathSolution;
+          MathSolution=Math.floor(Math.random()*6);
+          while(MathSolution==PreviousMathSolution)
+          {
+              MathSolution=Math.floor(Math.random()*6);
+          }
+          MathQuestion1=Math.floor(Math.random()*MathSolution);
+          MathQuestion2=MathSolution-MathQuestion1;
+          if(MyEQLevel==0)
+          {
+              MathProblems[0].innerHTML=MathSolution;
+          }
+          else if(MyEQLevel==1)
+          {
+           MathProblems[0].innerHTML=MathQuestion1 + " + " + MathQuestion2;
+          }
+   }
 </script>
 
 </body>
