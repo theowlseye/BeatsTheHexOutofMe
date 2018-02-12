@@ -96,6 +96,7 @@
    var MyLevel=0;
    var MyEQLevel=0;
    var MyTierLevel=0;
+   var TopNumber=6;
    
    //instantiate a TimelineLite    
    var MyTimeLine = new TimelineLite();
@@ -363,7 +364,7 @@
       if(IdNumber==0&&!HasTheGameStarted){
           HasTheGameStarted=true;
           //Change the direction to a math probelm
-          MathSolution=Math.floor(Math.random()*6);
+          MathSolution=Math.floor(Math.random()*TopNumber);
           MathQuestion1=Math.floor(Math.random()*MathSolution);
           MathQuestion2=MathSolution-MathQuestion1;
           if(MyEQLevel==0)
@@ -380,7 +381,7 @@
            D3arc.transition()
            .duration(MyTimerDuration)
            .on("end", TimesUp)
-           .attrTween("d", arcTween(2*Math.PI));
+           .attrTween("d", arcTween(2.05*Math.PI));
           
           return;
       } 
@@ -397,7 +398,7 @@
           D3arc.transition()
            .duration(MyTimerDuration)
            .on("end", TimesUp)
-           .attrTween("d", arcTween(2*Math.PI));
+           .attrTween("d", arcTween(2.05*Math.PI));
         
         //if answer is correct
         if(IdNumber==MathSolution)
@@ -425,6 +426,7 @@
    
    function TimesUp()
    {
+       if(!HasTheGameStarted){return;}
        D3arc.transition()
            .duration(0)
            .attrTween("d", arcTween(0));
@@ -432,7 +434,7 @@
         D3arc.transition()
            .duration(MyTimerDuration)
            .on("end", TimesUp)
-           .attrTween("d", arcTween(2*Math.PI));
+           .attrTween("d", arcTween(2.05*Math.PI));
         //restart
         MyTimeLineProg.reverse();
           //MyTimeLineProg.restart();   
@@ -441,11 +443,20 @@
    
    function LevelComplete()
    {
+       //restart
+       MyTimeLineProg.restart();
+       
+       D3arc.transition()
+           .duration(0)
+           .attrTween("d", arcTween(0));
+           
+        
+      
        MyLevel++;
        if(MyLevel==1)
        {
-         MyTimerDuration=3000;
-          D3arc.style("fill","blue");
+           MyTimerDuration=3000;
+           D3arc.style("fill","blue");
        }
        else if(MyLevel==2)
        {
@@ -473,10 +484,19 @@
            MyTimerDuration=5000;
            D3arc.style("fill","purple");
            //if equation level at 1 reset 
-           if(MyEQLevel==2){MyEQLevel=0;MyTierLevel++;}
+           if(MyEQLevel==1)
+           {
+               MyTierLevel++;
+               //stop timer
+               HasTheGameStarted=false;
+               MathProblems[0].innerHTML="Greate You did it! Next Adding!";
+               Instructions[0].style.color="black";
+               return;
+           }
            //if at the next tier
            if(MyTierLevel==1)
            {
+            MyEQLevel=0;   
             //add listeners
             for(var k=6;k<=18;k++)
             {
@@ -485,33 +505,55 @@
              HexText[k].addEventListener("touchstart",Hex_Click,false);
              HexShapes[k].addEventListener("touchstart",Hex_Click,false);
             }
+            //add pause to the game
+            HasTheGameStarted=false;
+            MathProblems[0].innerHTML="You have beaten the first number group!";
+            TopNumber=18;
+            Instructions[0].style.color="black";
             MyTimeLineFade1.reverse();
-          } 
-          CreateMathProblem();
-       }
-       
-       //restart
-       MyTimeLineProg.restart();
-       
-       D3arc.transition()
-           .duration(0)
-           .attrTween("d", arcTween(0));
-           
+            return;
+           }
+           if(MyTierLevel==2)
+           {
+             MyEQLevel=0;   
+            //add listeners
+            for(var k=19;k<=36;k++)
+            {
+             HexShapes[k].addEventListener("mousedown",Hex_Click);
+             HexText[k].addEventListener("mousedown",Hex_Click);    
+             HexText[k].addEventListener("touchstart",Hex_Click,false);
+             HexShapes[k].addEventListener("touchstart",Hex_Click,false);
+            }
+            
+            //add pause to the game
+            HasTheGameStarted=false;
+            MathProblems[0].innerHTML="You have beaten the second number group!";
+            TopNumber=36;
+            Instructions[0].style.color="black";
+            MyTimeLineFade2.reverse();
+            return;
+           }
+           if(MyTierLevel==3)
+           {
+               MathProblems[0].innerHTML="You have beaten the Entire Game! How??";
+               return;
+           }
+        }
+        
         D3arc.transition()
            .duration(MyTimerDuration)
            .on("end", TimesUp)
-           .attrTween("d", arcTween(2*Math.PI));
-      
+           .attrTween("d", arcTween(2.05*Math.PI));
        
    }
    
    function CreateMathProblem()
    {
        var PreviousMathSolution=MathSolution;
-          MathSolution=Math.floor(Math.random()*6);
+          MathSolution=Math.floor(Math.random()*TopNumber);
           while(MathSolution==PreviousMathSolution)
           {
-              MathSolution=Math.floor(Math.random()*6);
+              MathSolution=Math.floor(Math.random()*TopNumber);
           }
           MathQuestion1=Math.floor(Math.random()*MathSolution);
           MathQuestion2=MathSolution-MathQuestion1;
