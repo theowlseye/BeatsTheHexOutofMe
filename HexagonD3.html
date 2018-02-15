@@ -102,6 +102,8 @@
    var MyTimeLine = new TimelineLite();
    var MyTimeLineTxt = new TimelineLite(); 
    var MyTimeLineProg = new TimelineLite(); 
+   var MyTimeLineProg2 = new TimelineLite();
+   var MyTimeLineProg3 = new TimelineLite();
    var MyTimeLineFade1=new TimelineLite();
    var MyTimeLineFade2=new TimelineLite();
    //create arc path
@@ -365,16 +367,23 @@
           HasTheGameStarted=true;
           //Change the direction to a math probelm
           MathSolution=Math.floor(Math.random()*TopNumber);
-          MathQuestion1=Math.floor(Math.random()*MathSolution);
-          MathQuestion2=MathSolution-MathQuestion1;
           if(MyEQLevel==0)
           {
               MathProblems[0].innerHTML=MathSolution;
           }
           else if(MyEQLevel==1)
           {
+           MathQuestion1=Math.floor(Math.random()*MathSolution);
+           MathQuestion2=MathSolution-MathQuestion1;      
            MathProblems[0].innerHTML=MathQuestion1 + " + " + MathQuestion2;
           }
+          else if(MyEQLevel==2)
+          {
+            MathQuestion2=Math.floor(Math.random()*MathSolution);
+            MathQuestion1=MathSolution+MathQuestion2; 
+            MathProblems[0].innerHTML=MathQuestion1 + " - " + MathQuestion2;
+          }
+          //make the Instructions invisible
           Instructions[0].style.color="white";
      
           //start the timer
@@ -407,8 +416,6 @@
           MyTimeLineProg.play();
           MyTimeLineProg.resume();
           CreateMathProblem();
-          
-          
         }
         else
         {
@@ -477,68 +484,32 @@
        {
           //unlock next Equation level
           MyEQLevel++;
-          
-            
            //resset level to 0
            MyLevel=0;
            MyTimerDuration=5000;
            D3arc.style("fill","purple");
-           //if equation level at 1 reset 
+           HasTheGameStarted=false;
+           Instructions[0].style.color="black";
+           //if equation level at 2 reset 
            if(MyEQLevel==1)
            {
-               MyTierLevel++;
-               //stop timer
-               HasTheGameStarted=false;
                MathProblems[0].innerHTML="Greate You did it! Next Adding!";
-               Instructions[0].style.color="black";
+           }
+           else if(MyEQLevel==2)
+           {
+               MathProblems[0].innerHTML="Greate You did it! Next Subtraction!";
+           }
+           else if(MyEQLevel==3)
+           {
+               TierComplete();
+              
+           }
+            //set timer to 0
+               D3arc.transition()
+                    .duration(0)
+                    .attrTween("d", arcTween(0));
                return;
-           }
-           //if at the next tier
-           if(MyTierLevel==1)
-           {
-            MyEQLevel=0;   
-            //add listeners
-            for(var k=6;k<=18;k++)
-            {
-             HexShapes[k].addEventListener("mousedown",Hex_Click);
-             HexText[k].addEventListener("mousedown",Hex_Click);    
-             HexText[k].addEventListener("touchstart",Hex_Click,false);
-             HexShapes[k].addEventListener("touchstart",Hex_Click,false);
-            }
-            //add pause to the game
-            HasTheGameStarted=false;
-            MathProblems[0].innerHTML="You have beaten the first number group!";
-            TopNumber=18;
-            Instructions[0].style.color="black";
-            MyTimeLineFade1.reverse();
-            return;
-           }
-           if(MyTierLevel==2)
-           {
-             MyEQLevel=0;   
-            //add listeners
-            for(var k=19;k<=36;k++)
-            {
-             HexShapes[k].addEventListener("mousedown",Hex_Click);
-             HexText[k].addEventListener("mousedown",Hex_Click);    
-             HexText[k].addEventListener("touchstart",Hex_Click,false);
-             HexShapes[k].addEventListener("touchstart",Hex_Click,false);
-            }
-            
-            //add pause to the game
-            HasTheGameStarted=false;
-            MathProblems[0].innerHTML="You have beaten the second number group!";
-            TopNumber=36;
-            Instructions[0].style.color="black";
-            MyTimeLineFade2.reverse();
-            return;
-           }
-           if(MyTierLevel==3)
-           {
-               MathProblems[0].innerHTML="You have beaten the Entire Game! How??";
-               return;
-           }
-        }
+       }   
         
         D3arc.transition()
            .duration(MyTimerDuration)
@@ -546,6 +517,49 @@
            .attrTween("d", arcTween(2.05*Math.PI));
        
    }
+   
+   function TierComplete()
+   {
+     MyEQLevel=0;   
+     if(MyTierLevel==1)
+           {
+            //add listeners
+            for(var k=6;k<=18;k++)
+              {
+               HexShapes[k].addEventListener("mousedown",Hex_Click);
+               HexText[k].addEventListener("mousedown",Hex_Click);    
+               HexText[k].addEventListener("touchstart",Hex_Click,false);
+               HexShapes[k].addEventListener("touchstart",Hex_Click,false);
+              }
+            //add pause to the game
+            MathProblems[0].innerHTML="You have beaten the first number group!";
+            TopNumber=18;
+            Instructions[0].style.color="black";
+            MyTimeLineFade1.reverse();
+           }
+     if(MyTierLevel==2)
+           {
+            //add listeners
+            for(var k=19;k<=36;k++)
+              {
+               HexShapes[k].addEventListener("mousedown",Hex_Click);
+               HexText[k].addEventListener("mousedown",Hex_Click);    
+               HexText[k].addEventListener("touchstart",Hex_Click,false);
+               HexShapes[k].addEventListener("touchstart",Hex_Click,false);
+              }
+            
+            //add pause to the game
+            MathProblems[0].innerHTML="You have beaten the second number group!";
+            TopNumber=36;
+            MyTimeLineFade2.reverse();
+           }
+           if(MyTierLevel==3)
+           {
+               MathProblems[0].innerHTML="You have beaten the Entire Game! How??";
+           }
+          
+    }
+   
    
    function CreateMathProblem()
    {
@@ -555,15 +569,22 @@
           {
               MathSolution=Math.floor(Math.random()*TopNumber);
           }
-          MathQuestion1=Math.floor(Math.random()*MathSolution);
-          MathQuestion2=MathSolution-MathQuestion1;
+          
           if(MyEQLevel==0)
           {
               MathProblems[0].innerHTML=MathSolution;
           }
           else if(MyEQLevel==1)
           {
+           MathQuestion1=Math.floor(Math.random()*MathSolution);
+           MathQuestion2=MathSolution-MathQuestion1;      
            MathProblems[0].innerHTML=MathQuestion1 + " + " + MathQuestion2;
+          }
+          else if(MyEQLevel==2)
+          {
+            MathQuestion2=Math.floor(Math.random()*MathSolution);
+            MathQuestion1=MathSolution+MathQuestion2; 
+            MathProblems[0].innerHTML=MathQuestion1 + " - " + MathQuestion2;
           }
    }
 </script>
